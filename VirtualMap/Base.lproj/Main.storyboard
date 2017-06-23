@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="VirtualMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2v8-6a-1El" customClass="MapView" customModule="VirtualMap" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="375" height="617"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Tqv-tx-gsl" appends="YES" id="egG-4s-lJc"/>
+                                    <outletCollection property="gestureRecognizers" destination="QKt-0d-rhr" appends="YES" id="5vB-jK-j36"/>
+                                    <outletCollection property="gestureRecognizers" destination="Gfm-zA-blm" appends="YES" id="3zF-QS-U4i"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T5Z-by-uRQ">
+                                <rect key="frame" x="0.0" y="20" width="375" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8y-YT-phI">
+                                        <rect key="frame" x="16" y="-0.5" width="30" height="31"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="16"/>
+                                        <state key="normal">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.381203711" green="0.62503105400000003" blue="0.9087159038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="L8y-YT-phI" firstAttribute="centerY" secondItem="T5Z-by-uRQ" secondAttribute="centerY" id="457-BE-O8D"/>
+                                    <constraint firstAttribute="height" constant="30" id="5qN-ra-9XY"/>
+                                    <constraint firstItem="L8y-YT-phI" firstAttribute="leading" secondItem="T5Z-by-uRQ" secondAttribute="leading" constant="16" id="Bdu-ZW-drm"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="T5Z-by-uRQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1Nu-fO-6KB"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="2v8-6a-1El" secondAttribute="bottom" id="E1p-0D-P3m"/>
+                            <constraint firstItem="2v8-6a-1El" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fae-A2-hnI"/>
+                            <constraint firstAttribute="trailing" secondItem="2v8-6a-1El" secondAttribute="trailing" id="Y7M-Do-joe"/>
+                            <constraint firstAttribute="trailing" secondItem="T5Z-by-uRQ" secondAttribute="trailing" id="dJb-q8-TWp"/>
+                            <constraint firstItem="2v8-6a-1El" firstAttribute="top" secondItem="T5Z-by-uRQ" secondAttribute="bottom" id="plH-ht-obn"/>
+                            <constraint firstItem="T5Z-by-uRQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="uQb-Kb-Jo9"/>
+                        </constraints>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="chooseFloorBtn" destination="L8y-YT-phI" id="3gY-Wy-btH"/>
+                        <outlet property="chooseFloorView" destination="T5Z-by-uRQ" id="JwD-rq-9Ub"/>
+                        <outlet property="mapView" destination="2v8-6a-1El" id="xcs-HD-fsn"/>
+                        <outlet property="panGestureRecognizer" destination="QKt-0d-rhr" id="p9J-gF-XGj"/>
+                        <outlet property="pinchGestureRecognizer" destination="Tqv-tx-gsl" id="eCE-n9-aW7"/>
+                        <outlet property="rotateGestureRecognizer" destination="Gfm-zA-blm" id="Brd-IZ-uDt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="Tqv-tx-gsl">
+                    <connections>
+                        <action selector="handlePinchWithRecognizer:" destination="BYZ-38-t0r" id="bn4-2T-5g7"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="QKt-0d-rhr">
+                    <connections>
+                        <action selector="handlePanWithRecognizer:" destination="BYZ-38-t0r" id="dKL-tv-A2h"/>
+                    </connections>
+                </panGestureRecognizer>
+                <rotationGestureRecognizer id="Gfm-zA-blm">
+                    <connections>
+                        <action selector="handleRotateWithRecognizer:" destination="BYZ-38-t0r" id="ph4-QE-dqk"/>
+                    </connections>
+                </rotationGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="32.799999999999997" y="38.23088455772114"/>
+        </scene>
+    </scenes>
+</document>

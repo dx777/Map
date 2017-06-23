@@ -1,0 +1,15 @@
+PODS:
+  - Alamofire (4.4.0)
+  - DropDown (2)
+
+DEPENDENCIES:
+  - Alamofire
+  - DropDown
+
+SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  DropDown: 744784d9c9aa505100e942c16acd05430cbb2f0a
+
+PODFILE CHECKSUM: dc8ed9d59cad2dc055c4cbb75773d105b1d6d138
+
+COCOAPODS: 1.2.1
