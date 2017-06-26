@@ -50,6 +50,11 @@
 		9A7E49DE1EED9F5000418159 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E49DB1EED9F5000418159 /* APIClient.swift */; };
 		9A7E49DF1EED9F5000418159 /* CurrentAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E49DC1EED9F5000418159 /* CurrentAPIClient.swift */; };
 		9A7E49E01EED9F5000418159 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E49DD1EED9F5000418159 /* Request.swift */; };
+		AC7C7C491EFD59DC00A51CCB /* Elevator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C481EFD59DC00A51CCB /* Elevator.swift */; };
+		AC7C7C4B1EFD5AF300A51CCB /* SquareCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C4A1EFD5AF300A51CCB /* SquareCoordinates.swift */; };
+		AC7C7C4D1EFD5DD200A51CCB /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C4C1EFD5DD200A51CCB /* Position.swift */; };
+		AC7C7C4F1EFD6A0B00A51CCB /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C4E1EFD6A0B00A51CCB /* Square.swift */; };
+		AC7C7C511F00E44A00A51CCB /* Travolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C501F00E44A00A51CCB /* Travolator.swift */; };
 		EF8A48DAFC6FF22E04B2BA42 /* Pods_VirtualMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65DA63BCFF4B5C38D3205E3 /* Pods_VirtualMap.framework */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +114,11 @@
 		9A7E49DB1EED9F5000418159 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		9A7E49DC1EED9F5000418159 /* CurrentAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentAPIClient.swift; sourceTree = "<group>"; };
 		9A7E49DD1EED9F5000418159 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		AC7C7C481EFD59DC00A51CCB /* Elevator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Elevator.swift; sourceTree = "<group>"; };
+		AC7C7C4A1EFD5AF300A51CCB /* SquareCoordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquareCoordinates.swift; sourceTree = "<group>"; };
+		AC7C7C4C1EFD5DD200A51CCB /* Position.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		AC7C7C4E1EFD6A0B00A51CCB /* Square.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
+		AC7C7C501F00E44A00A51CCB /* Travolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Travolator.swift; sourceTree = "<group>"; };
 		C35D47E264C85D47229344F2 /* Pods-VirtualMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualMap/Pods-VirtualMap.debug.xcconfig"; sourceTree = "<group>"; };
 		E65DA63BCFF4B5C38D3205E3 /* Pods_VirtualMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VirtualMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -178,6 +188,7 @@
 				9A7E49A51EED9B9100418159 /* GestureRecognizerDelegate.swift */,
 				9A7E48071EED933900418159 /* MapViewController.swift */,
 				9A7E49D01EED9E3200418159 /* LineCoordinates.swift */,
+				AC7C7C4A1EFD5AF300A51CCB /* SquareCoordinates.swift */,
 				9A7E49D21EED9EBE00418159 /* Logger.swift */,
 				9A7E48171EED96E700418159 /* MapView.swift */,
 				9A7E49CC1EED9E0F00418159 /* MapDataParsing.swift */,
@@ -200,6 +211,7 @@
 				9A7E49861EED9A7400418159 /* DrawObject.swift */,
 				9A7E49871EED9A7400418159 /* Line.swift */,
 				9A7E49881EED9A7400418159 /* Circle.swift */,
+				AC7C7C4E1EFD6A0B00A51CCB /* Square.swift */,
 				9A7E49891EED9A7400418159 /* BeaconCircle.swift */,
 				9A7E498A1EED9A7400418159 /* UserCircle.swift */,
 				9A7E498B1EED9A7400418159 /* UserRawCircle.swift */,
@@ -232,6 +244,9 @@
 				9A7E499C1EED9AD800418159 /* Door.swift */,
 				9A7E499D1EED9AD800418159 /* DoorWithCoordinates.swift */,
 				9A7E499E1EED9AD800418159 /* Beacon.swift */,
+				AC7C7C481EFD59DC00A51CCB /* Elevator.swift */,
+				AC7C7C501F00E44A00A51CCB /* Travolator.swift */,
+				AC7C7C4C1EFD5DD200A51CCB /* Position.swift */,
 			);
 			name = FloorContent;
 			sourceTree = "<group>";
@@ -426,6 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A7E49991EED9AC400418159 /* Floor.swift in Sources */,
+				AC7C7C4F1EFD6A0B00A51CCB /* Square.swift in Sources */,
 				9A7E49E01EED9F5000418159 /* Request.swift in Sources */,
 				9A7E49D31EED9EBE00418159 /* Logger.swift in Sources */,
 				9A7E498C1EED9A7400418159 /* DrawObject.swift in Sources */,
@@ -439,6 +455,7 @@
 				9A7E49C41EED9D6900418159 /* TestBeaconManager.swift in Sources */,
 				9A7E48181EED96E700418159 /* MapView.swift in Sources */,
 				9A7E499F1EED9AD800418159 /* Wall.swift in Sources */,
+				AC7C7C4D1EFD5DD200A51CCB /* Position.swift in Sources */,
 				9A7E48061EED933900418159 /* AppDelegate.swift in Sources */,
 				9A7E49911EED9A7400418159 /* UserRawCircle.swift in Sources */,
 				9A7E49901EED9A7400418159 /* UserCircle.swift in Sources */,
@@ -452,6 +469,7 @@
 				9A7E49D11EED9E3200418159 /* LineCoordinates.swift in Sources */,
 				9A7E49C91EED9D6900418159 /* BeaconRangingData.swift in Sources */,
 				9A7E49A11EED9AD800418159 /* DoorWithCoordinates.swift in Sources */,
+				AC7C7C511F00E44A00A51CCB /* Travolator.swift in Sources */,
 				9A7E49D91EED9F2800418159 /* Geometry.swift in Sources */,
 				9A7E49961EED9A9000418159 /* MapOffset.swift in Sources */,
 				9A7E49CD1EED9E0F00418159 /* MapDataParsing.swift in Sources */,
@@ -460,6 +478,8 @@
 				9A7E49BA1EED9D0900418159 /* CoordinatesConverter.swift in Sources */,
 				9A7E498F1EED9A7400418159 /* BeaconCircle.swift in Sources */,
 				9A7E49A21EED9AD800418159 /* Beacon.swift in Sources */,
+				AC7C7C4B1EFD5AF300A51CCB /* SquareCoordinates.swift in Sources */,
+				AC7C7C491EFD59DC00A51CCB /* Elevator.swift in Sources */,
 				9A7E49A41EED9B6A00418159 /* ApplicationManager.swift in Sources */,
 				9A7E49CB1EED9D9800418159 /* CurrentUserLocation.swift in Sources */,
 				9A7E49C81EED9D6900418159 /* BeaconManagerDelegate.swift in Sources */,

@@ -3,12 +3,14 @@ import UIKit
 class MapView: UIView {
     
     private var emptyBeacon = [BeaconRangingPoint]()
-    private var floor = Floor(walls: [], doors: [], beacons: [], isneedreview: false)
+    private var floor = Floor(walls: [], doors: [], beacons: [], elevators: [], travolators: [], isneedreview: false)
     private let wallColor = UIColor.black
     private let doorColor = UIColor.red
     private let triangleColor = UIColor.red
     private let perpendicularColor = UIColor.darkGray
+    private let elevatorColor = UIColor(red: 0, green: 166.0 / 255.0, blue: 166.0 / 255.0, alpha: 1)
     private let doorLength = 3.0
+    private let elevatorLength = 3.0
     private let beaconColor = UIColor.green
     private let beaconNoActiveColor = UIColor(red: 20/255.0, green: 154.0/255.0, blue: 53.0/255.0, alpha: 1.0)
     private let beaconFrameColor = UIColor.brown
@@ -41,9 +43,13 @@ class MapView: UIView {
         let mapWithScaleCoordinaates =  frameToDraw.getSuitableCoordinates(floor: floor, currentUserLocation: currentUserLocation, beaconRangingData: beaconRangingData)
         let lines = mapWithScaleCoordinaates.lines
         let circles = mapWithScaleCoordinaates.circles
+        let squares = mapWithScaleCoordinaates.squares
         
         drawLines(lines: lines)
         drawCircles(circles: circles)
+        drawSquares(squares: squares)
+        
+        
         if MapViewController.arrayOfPointsToDraw.isEmpty == false{
             drawRoute()
             
@@ -83,6 +89,31 @@ class MapView: UIView {
                 perpendicularPath.addLine(to: CGPoint(x: line.x2, y: line.y2))
                 perpendicularColor.setStroke()
                 perpendicularPath.stroke()
+            }
+        }
+    }
+    
+    
+    fileprivate func drawSquares(squares :[Square]) {
+        let elevatorPath = UIBezierPath()
+        let elevatorXPath = UIBezierPath()
+        for square in squares {
+            if square.type == .elevator {
+                elevatorPath.move(to: CGPoint(x: square.x1, y: square.y1))
+                elevatorPath.addLine(to: CGPoint(x: square.x2, y: square.y2))
+                elevatorPath.addLine(to: CGPoint(x: square.x4, y: square.y4))
+                elevatorPath.addLine(to: CGPoint(x: square.x3, y: square.y3))
+                elevatorPath.lineWidth = CGFloat(elevatorLength)
+                elevatorPath.close()
+                elevatorColor.setStroke()
+                elevatorPath.stroke()
+                
+                elevatorXPath.move(to: CGPoint(x: square.x1, y: square.y1))
+                elevatorXPath.addLine(to: CGPoint(x: square.x4, y: square.y4))
+                elevatorXPath.move(to: CGPoint(x: square.x2, y: square.y2))
+                elevatorXPath.addLine(to: CGPoint(x: square.x3, y: square.y3))
+                elevatorXPath.close()
+                elevatorXPath.stroke()
             }
         }
     }
@@ -187,8 +218,6 @@ class MapView: UIView {
             }
         }
     }
-    
-    
     
     fileprivate func drawBeaconText (circle: BeaconCircle) {
         let attributes: NSDictionary = [

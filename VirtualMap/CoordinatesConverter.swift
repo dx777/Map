@@ -33,6 +33,7 @@ class CoordinatesConverter {
         let walls = floor.walls
         let doors = floor.doors
         let beacons = floor.beacons
+        let elevators = floor.elevators
         let closestBeacons = beaconRangingData.filter {$0.isClosest == true}
         var linesOfClosetBeacons: [Line] = []
         if !closestBeacons.isEmpty {
@@ -43,7 +44,7 @@ class CoordinatesConverter {
         var perpendiculars: [Line] = []
         
         if walls.isEmpty {
-            return DrawObject(lines: [], circles: [])
+            return DrawObject(lines: [], circles: [], squares: [])
         }
         
         let minAndMaxCoordinates = getMinAndMaxCoordinates(array: walls)
@@ -59,9 +60,10 @@ class CoordinatesConverter {
         let doorsCoordinates = doorCoordinates(doors: doors, walls: walls)
         let linesForDoors: [Line] = getLines(array: doorsCoordinates, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .door)
         let linesForTriangle: [Line] = getLines(array: linesOfClosetBeacons, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .triangle)
-        
         var allCirclesInMap: [Circle] = getCircles(array: beacons, beaconRangingData: beaconRangingData, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY)
+        let squaresOfElevators: [Square] = getSquares(array: elevators, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .elevator)
         
+        // Make here squares operations
 
         
         if currentUserLocation.isLocated {
@@ -83,7 +85,8 @@ class CoordinatesConverter {
         }
         let linesForPerpendicular: [Line] = getLines(array: perpendiculars, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .perpendicular)
         let allLinesInMap = linesOfWalls + linesForDoors + linesForTriangle + linesForPerpendicular
-        return DrawObject(lines: allLinesInMap, circles: allCirclesInMap)
+        let allSquaresInMap = squaresOfElevators;
+        return DrawObject(lines: allLinesInMap, circles: allCirclesInMap, squares: allSquaresInMap)
     }
     
     private func getMinAndMaxCoordinates(array: [Wall]) -> MapBounds {
@@ -159,6 +162,23 @@ class CoordinatesConverter {
         let y1door = wall.y1 + Int(Double(start) / Double(length) * Double((wall.y2 - wall.y1)))
         let y2door = wall.y1 + Int(Double(end) / Double(length) * Double((wall.y2 - wall.y1)))
         return DoorWithCoordinates(x1: x1door, x2: x2door, y1: y1door, y2: y2door)
+    }
+    
+    private func getSquares( array: [SquareCoordinates], scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat, type: TypeOfSquare) -> [Square] {
+        var result: [Square] = []
+        
+        for square in array {
+            result.append(Square(x1: Int(CGFloat(square.x1) * scale + offsetX),
+                                 x2: Int(CGFloat(square.x2) * scale + offsetX),
+                                 x3: Int(CGFloat(square.x3) * scale + offsetX),
+                                 x4: Int(CGFloat(square.x4) * scale + offsetX),
+                                 y1: Int(CGFloat(square.y1) * scale + offsetY),
+                                 y2: Int(CGFloat(square.y2) * scale + offsetY),
+                                 y3: Int(CGFloat(square.y3) * scale + offsetY),
+                                 y4: Int(CGFloat(square.y4) * scale + offsetY),
+                                 type: type))
+        }
+        return result
     }
     
     private func getCircles( array: [Beacon], beaconRangingData: [BeaconRangingPoint], scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> [BeaconCircle] {
