@@ -276,4 +276,5 @@ class GeoLocation {
         currentUserLocation.isLocated = true
         GeoLocation.userLocated = true
     }
+    
 }

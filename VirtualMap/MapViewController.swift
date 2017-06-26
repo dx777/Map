@@ -35,6 +35,7 @@ class MapViewController: UIViewController  {
     @IBOutlet var rotateGestureRecognizer: UIRotationGestureRecognizer!
     @IBOutlet weak var chooseFloorView: UIView!
     @IBOutlet weak var chooseFloorBtn: UIButton!
+    @IBOutlet weak var distanceLbl: UILabel!
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -329,25 +330,38 @@ class MapViewController: UIViewController  {
         let currentPoints = pointsDict["\(MapViewController.currentFloor!)"]
         
         
-        if currentPoints != nil {
+        if currentPoints != nil && (currentPoints?.count)! > 0{
+            var totalLength : Double = 0
+            var prevPoint: CGPoint = CGPoint(x: 0, y: 0)
             for point in currentPoints! {
                 let x = point["x"] as? Int
                 let y = point["y"] as? Int
                 let coordinate = CGPoint(x: x!, y: y!)
                 
-                let scaledCoordinate = scaleCoordinate(coordinate: coordinate, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
+                var scaledCoordinate = scaleCoordinate(coordinate: coordinate, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
                 
+                if(MapViewController.arrayOfPointsToDraw.count == 0) {
+                    scaledCoordinate = MapViewController.currentUserLoc!
+                }
                 MapViewController.arrayOfPointsToDraw.append(scaledCoordinate)
                 
-                
+                if(MapViewController.arrayOfPointsToDraw.count > 1) {
+                    totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(scaledCoordinate.x), y2: Double(scaledCoordinate.y))
+                }
+                prevPoint = CGPoint(x: Double(scaledCoordinate.x), y: Double(scaledCoordinate.y))
             }
+            totalLength /= 41.7
+            self.distanceLbl.text = String(format: "%li м", Int(totalLength))
+            
         }
-        
-        
         
     }
     
-    
+    func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let xDist = a.x - b.x
+        let yDist = a.y - b.y
+        return CGFloat(sqrt((xDist * xDist) + (yDist * yDist)))
+    }
 
 
     

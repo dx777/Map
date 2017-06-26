@@ -14,6 +14,9 @@ class MapDataParsing {
         var beacons: [Beacon] = []
         var elevators: [Elevator] = []
         var travolators: [Travolator] = []
+        var stairs: [Stairs] = []
+        var stacks: [Stack] = []
+        
         var floorContent: [NSDictionary]?
         
         if !MapViewController.switchingMode {
@@ -116,8 +119,48 @@ class MapDataParsing {
                                                 position: Position(top: position["top"] as! Int, left: position["left"] as! Int)))
                 }
             }
+            
+            let stairsContent = NSDictionaryUtility.getChildren(json: floorContent[0], parent: "stairs")
+            
+            
+            if let stairsContent = stairsContent{
+                for stair in stairsContent {
+                    let position = stair["position"] as! NSDictionary
+                    stairs.append(Stairs(id: stair["id"] as! String,
+                                         x1: stair["x1"] as! Int,
+                                         x2: stair["x2"] as! Int,
+                                         x3: stair["x3"] as! Int,
+                                         x4: stair["x4"] as! Int,
+                                         y1: stair["y1"] as! Int,
+                                         y2: stair["y2"] as! Int,
+                                         y3: stair["y3"] as! Int,
+                                         y4: stair["y4"] as! Int,
+                                         angle: stair["angle"] as! Int,
+                                         scaleX: stair["scaleX"] as! Float,
+                                         scaleY: stair["scaleY"] as! Float,
+                                         position: Position(top: position["top"] as! Int, left: position["left"] as! Int)))
+                }
+            }
+            
+            
+            let stacksContent = NSDictionaryUtility.getChildren(json: floorContent[0], parent: "stacks")
+            
+            
+            if let stacksContent = stacksContent{
+                for stack in stacksContent {
+                    stacks.append(Stack(id: stack["id"] as! String,
+                                         x1: stack["x1"] as! Int,
+                                         x2: stack["x2"] as! Int,
+                                         x3: stack["x3"] as! Int,
+                                         x4: stack["x4"] as! Int,
+                                         y1: stack["y1"] as! Int,
+                                         y2: stack["y2"] as! Int,
+                                         y3: stack["y3"] as! Int,
+                                         y4: stack["y4"] as! Int))
+                }
+            }
         }
         
-        return Floor(walls: walls, doors: doors, beacons: beacons, elevators: elevators, travolators: travolators, isneedreview: isneedreview)
+        return Floor(walls: walls, doors: doors, beacons: beacons, elevators: elevators, travolators: travolators, stairs: stairs, stacks: stacks, isneedreview: isneedreview)
     }
 }

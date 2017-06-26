@@ -34,6 +34,9 @@ class CoordinatesConverter {
         let doors = floor.doors
         let beacons = floor.beacons
         let elevators = floor.elevators
+        let travolators = floor.travolators
+        let stairs = floor.stairs
+        let stacks = floor.stacks
         let closestBeacons = beaconRangingData.filter {$0.isClosest == true}
         var linesOfClosetBeacons: [Line] = []
         if !closestBeacons.isEmpty {
@@ -61,13 +64,14 @@ class CoordinatesConverter {
         let linesForDoors: [Line] = getLines(array: doorsCoordinates, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .door)
         let linesForTriangle: [Line] = getLines(array: linesOfClosetBeacons, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .triangle)
         var allCirclesInMap: [Circle] = getCircles(array: beacons, beaconRangingData: beaconRangingData, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY)
-        let squaresOfElevators: [Square] = getSquares(array: elevators, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .elevator)
         
-        // Make here squares operations
-
+        let squaresOfElevators: [Square] = getSquares(array: elevators, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .elevator)
+        let squaresOfTravolators: [Square] = getSquares(array: travolators, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .travolator)
+        let squaresOfStairs: [Square] = getSquares(array: stairs, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .stairs)
+        let squaresOfStacks: [Square] = getSquares(array: stacks, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .stack)
         
         if currentUserLocation.isLocated {
-            let circleForUser: Circle = getUserCircle(currentUserLocation: currentUserLocation, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY)
+            var circleForUser: Circle = getUserCircle(currentUserLocation: currentUserLocation, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY)
             locX = circleForUser.x
             locY = circleForUser.y
             userPoint = CGPoint(x: locX!, y: locY!)
@@ -76,16 +80,26 @@ class CoordinatesConverter {
             CoordinatesConverter.unScaledUserPoint = unscalepoint
             print("UNSCALED USER POINT \(unscalepoint)")
             
+            if MapViewController.arrayOfPointsToDraw.isEmpty == false {
+//                let attachedCoordinates = Geometry.getAttachedCoordinates(x: Int((MapViewController.currentUserLoc?.x)!), y: Int((MapViewController.currentUserLoc?.y)!), x1: Int(MapViewController.arrayOfPointsToDraw[0].x), x2: Int(MapViewController.arrayOfPointsToDraw[1].x), y1: Int(MapViewController.arrayOfPointsToDraw[0].y), y2: Int(MapViewController.arrayOfPointsToDraw[1].y))
+                let attachedCoordinates = Geometry.getAttachedCoordinates(x: Int(circleForUser.x), y: Int(circleForUser.y), x1: Int(MapViewController.arrayOfPointsToDraw[0].x), x2: Int(MapViewController.arrayOfPointsToDraw[1].x), y1: Int(MapViewController.arrayOfPointsToDraw[0].y), y2: Int(MapViewController.arrayOfPointsToDraw[1].y))
+                circleForUser = UserCircle(x: attachedCoordinates[0], y: attachedCoordinates[1])
+                Logger.logMessage(message: "\(attachedCoordinates)", level: .info)
+                
+            } else {
+                Logger.logMessage(message: "\([circleForUser.x, circleForUser.y])", level: .info)
+            }
             
             let circleForRawUser = getRawUserCircle(currentUserLocation: currentUserLocation, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY)
             allCirclesInMap.append(circleForUser)
             allCirclesInMap.append(circleForRawUser)
+            
             perpendiculars.append(Line(x1: Int((currentUserLocation.abp?.x)!), x2: Int((currentUserLocation.pointForDrawPerpendiculars?.x)!), y1: Int((currentUserLocation.abp?.y)!), y2: Int((currentUserLocation.pointForDrawPerpendiculars?.y)!), type: .perpendicular))
             perpendiculars.append(Line(x1: Int((currentUserLocation.acp?.x)!), x2: Int((currentUserLocation.pointForDrawPerpendiculars?.x)!), y1: Int((currentUserLocation.acp?.y)!), y2: Int((currentUserLocation.pointForDrawPerpendiculars?.y)!), type: .perpendicular))
         }
         let linesForPerpendicular: [Line] = getLines(array: perpendiculars, scale: scale, offsetX: offsets.offsetX, offsetY: offsets.offsetY, type: .perpendicular)
         let allLinesInMap = linesOfWalls + linesForDoors + linesForTriangle + linesForPerpendicular
-        let allSquaresInMap = squaresOfElevators;
+        let allSquaresInMap = squaresOfElevators + squaresOfTravolators + squaresOfStairs + squaresOfStacks
         return DrawObject(lines: allLinesInMap, circles: allCirclesInMap, squares: allSquaresInMap)
     }
     

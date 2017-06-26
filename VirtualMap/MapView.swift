@@ -3,14 +3,18 @@ import UIKit
 class MapView: UIView {
     
     private var emptyBeacon = [BeaconRangingPoint]()
-    private var floor = Floor(walls: [], doors: [], beacons: [], elevators: [], travolators: [], isneedreview: false)
+    private var floor = Floor(walls: [], doors: [], beacons: [], elevators: [], travolators: [], stairs: [], stacks: [], isneedreview: false)
     private let wallColor = UIColor.black
     private let doorColor = UIColor.red
     private let triangleColor = UIColor.red
     private let perpendicularColor = UIColor.darkGray
     private let elevatorColor = UIColor(red: 0, green: 166.0 / 255.0, blue: 166.0 / 255.0, alpha: 1)
+    private let travolatorColor = UIColor(red: 172.0 / 255.0, green: 0, blue: 0, alpha: 1)
+    private let stairsColor = UIColor(red: 0, green: 163.0 / 255.0, blue: 19.0 / 255.0, alpha: 1)
+    private let stackColor = UIColor(red: 0, green: 30.0 / 255.0, blue: 165.0 / 255.0, alpha: 1)
     private let doorLength = 3.0
     private let elevatorLength = 3.0
+    private let travolatorLength = 1
     private let beaconColor = UIColor.green
     private let beaconNoActiveColor = UIColor(red: 20/255.0, green: 154.0/255.0, blue: 53.0/255.0, alpha: 1.0)
     private let beaconFrameColor = UIColor.brown
@@ -45,15 +49,14 @@ class MapView: UIView {
         let circles = mapWithScaleCoordinaates.circles
         let squares = mapWithScaleCoordinaates.squares
         
-        drawLines(lines: lines)
-        drawCircles(circles: circles)
-        drawSquares(squares: squares)
-        
-        
         if MapViewController.arrayOfPointsToDraw.isEmpty == false{
             drawRoute()
             
         }
+        
+        drawLines(lines: lines)
+        drawCircles(circles: circles)
+        drawSquares(squares: squares)
         
         
     }
@@ -97,6 +100,12 @@ class MapView: UIView {
     fileprivate func drawSquares(squares :[Square]) {
         let elevatorPath = UIBezierPath()
         let elevatorXPath = UIBezierPath()
+        let travolatorPath = UIBezierPath()
+        let travolatorAdditionalPath = UIBezierPath()
+        let stairsPath = UIBezierPath()
+        let stairsAdditionalPath = UIBezierPath()
+        let stacksPath = UIBezierPath()
+        
         for square in squares {
             if square.type == .elevator {
                 elevatorPath.move(to: CGPoint(x: square.x1, y: square.y1))
@@ -114,6 +123,85 @@ class MapView: UIView {
                 elevatorXPath.addLine(to: CGPoint(x: square.x3, y: square.y3))
                 elevatorXPath.close()
                 elevatorXPath.stroke()
+            }
+            
+            if square.type == .travolator {
+                let height: CGFloat = CGFloat(square.y4 - square.y1)
+                let width: CGFloat = CGFloat(square.x2 - square.x1)
+                travolatorPath.move(to: CGPoint(x: square.x1, y: square.y1))
+                travolatorPath.addLine(to: CGPoint(x: square.x2, y: square.y2))
+                travolatorPath.addLine(to: CGPoint(x: square.x4, y: (square.y1 + Int(height / 4))))
+                travolatorPath.addLine(to: CGPoint(x: square.x3, y: (square.y2 + Int(height / 4))))
+                travolatorPath.lineWidth = CGFloat(travolatorLength)
+                travolatorPath.close()
+                travolatorColor.setStroke()
+                travolatorPath.stroke()
+                
+                travolatorAdditionalPath.move(to: CGPoint(x: square.x1 + Int(width * 0.1), y: square.y1))
+                travolatorAdditionalPath.addLine(to: CGPoint(x: square.x1 + Int(width * 0.1), y: square.y4))
+                travolatorAdditionalPath.addLine(to: CGPoint(x: square.x1 + Int(width * 0.9), y: square.y1))
+                
+                let numberOfLines = 17
+                let travolatorLeftAdditionalPos = square.x1 + Int(width * 0.1)
+                let travolatorRightAdditionalPos = square.x1 + Int(width * 0.9)
+                for y in stride(from: numberOfLines, to: 1, by: -1) {
+                    let yPos = square.y4 - Int(Float(height) / Float(numberOfLines)) * y
+                    // Get right x coordinate using Line equation by points
+                    let x = ((yPos - square.y4) * (travolatorRightAdditionalPos - travolatorLeftAdditionalPos) / (square.y1 - square.y4) ) + travolatorLeftAdditionalPos
+                    
+                    travolatorAdditionalPath.move(to: CGPoint(x: travolatorLeftAdditionalPos, y: yPos))
+                    travolatorAdditionalPath.addLine(to: CGPoint(x: x, y: yPos))
+                }
+                
+                travolatorAdditionalPath.lineWidth = CGFloat(travolatorLength)
+                travolatorAdditionalPath.stroke()
+            }
+            
+            if square.type == .stairs {
+                let height: CGFloat = CGFloat(square.y4 - square.y1)
+                let width: CGFloat = CGFloat(square.x2 - square.x1)
+                stairsPath.move(to: CGPoint(x: square.x1, y: square.y1))
+                stairsPath.addLine(to: CGPoint(x: square.x2, y: square.y2))
+                stairsPath.addLine(to: CGPoint(x: square.x4, y: square.y4))
+                stairsPath.addLine(to: CGPoint(x: square.x3, y: square.y3))
+                stairsPath.close()
+                stairsColor.setStroke()
+                stairsPath.stroke()
+                
+                let stairsMiddleTopY = square.y1 + Int(height * 0.42)
+                let stairsMiddleBottomY = square.y1 + Int(height * 0.58)
+                
+                stairsAdditionalPath.move(to: CGPoint(x: square.x1, y: stairsMiddleTopY))
+                stairsAdditionalPath.addLine(to: CGPoint(x: square.x2, y: stairsMiddleTopY))
+                
+                stairsAdditionalPath.move(to: CGPoint(x: square.x1, y: stairsMiddleBottomY))
+                stairsAdditionalPath.addLine(to: CGPoint(x: square.x2, y: stairsMiddleBottomY))
+                
+                let numberOfLines = 7
+                let widthPerStair = Float(width) / 7
+                for x in 1...numberOfLines {
+                    let xPos = Float(square.x1) + widthPerStair * Float(x)
+                    stairsAdditionalPath.move(to: CGPoint(x: CGFloat(xPos), y: CGFloat(square.y1)))
+                    stairsAdditionalPath.addLine(to: CGPoint(x: CGFloat(xPos), y: CGFloat(stairsMiddleTopY)))
+                    
+                    
+                    stairsAdditionalPath.move(to: CGPoint(x: CGFloat(xPos), y: CGFloat(stairsMiddleBottomY)))
+                    stairsAdditionalPath.addLine(to: CGPoint(x: CGFloat(xPos), y: CGFloat(square.y4)))
+                }
+                
+                
+                
+                stairsAdditionalPath.stroke()
+            }
+            
+            if square.type == .stack {
+                stacksPath.move(to: CGPoint(x: square.x1, y: square.y1))
+                stacksPath.addLine(to: CGPoint(x: square.x2, y: square.y2))
+                stacksPath.addLine(to: CGPoint(x: square.x4, y: square.y4))
+                stacksPath.addLine(to: CGPoint(x: square.x3, y: square.y3))
+                stacksPath.close()
+                stackColor.setFill()
+                stacksPath.fill()
             }
         }
     }
@@ -155,7 +243,7 @@ class MapView: UIView {
             
         }
         line.path = linePath.cgPath
-        line.strokeColor = UIColor.blue.cgColor
+        line.strokeColor = UIColor(red: 90.0 / 255.0, green: 169.0 / 255.0, blue: 221.0 / 255.0, alpha: 1.0).cgColor
         line.lineWidth = 3
         line.lineJoin = kCALineJoinRound
         line.fillColor = UIColor.clear.cgColor

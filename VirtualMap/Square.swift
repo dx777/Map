@@ -1,6 +1,9 @@
 import Foundation
 enum TypeOfSquare {
     case elevator
+    case travolator
+    case stairs
+    case stack
     
     init() {
         self = .elevator

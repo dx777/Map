@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -54,22 +54,43 @@
                                     <constraint firstItem="L8y-YT-phI" firstAttribute="leading" secondItem="T5Z-by-uRQ" secondAttribute="leading" constant="16" id="Bdu-ZW-drm"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jbm-NS-lq4">
+                                <rect key="frame" x="0.0" y="50" width="375" height="30"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wb2-sn-zPL">
+                                        <rect key="frame" x="187.5" y="15.5" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.381203711" green="0.62503105400000003" blue="0.9087159038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="wb2-sn-zPL" firstAttribute="centerX" secondItem="Jbm-NS-lq4" secondAttribute="centerX" id="2RT-jk-9B9"/>
+                                    <constraint firstItem="wb2-sn-zPL" firstAttribute="centerY" secondItem="Jbm-NS-lq4" secondAttribute="centerY" id="bEy-2q-TAo"/>
+                                    <constraint firstAttribute="height" constant="30" id="wJn-zX-QfC"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="T5Z-by-uRQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1Nu-fO-6KB"/>
+                            <constraint firstItem="Jbm-NS-lq4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="A01-CP-gcI"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="2v8-6a-1El" secondAttribute="bottom" id="E1p-0D-P3m"/>
                             <constraint firstItem="2v8-6a-1El" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fae-A2-hnI"/>
                             <constraint firstAttribute="trailing" secondItem="2v8-6a-1El" secondAttribute="trailing" id="Y7M-Do-joe"/>
                             <constraint firstAttribute="trailing" secondItem="T5Z-by-uRQ" secondAttribute="trailing" id="dJb-q8-TWp"/>
                             <constraint firstItem="2v8-6a-1El" firstAttribute="top" secondItem="T5Z-by-uRQ" secondAttribute="bottom" id="plH-ht-obn"/>
+                            <constraint firstItem="Jbm-NS-lq4" firstAttribute="top" secondItem="T5Z-by-uRQ" secondAttribute="bottom" id="trz-Rd-CTw"/>
                             <constraint firstItem="T5Z-by-uRQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="uQb-Kb-Jo9"/>
+                            <constraint firstAttribute="trailing" secondItem="Jbm-NS-lq4" secondAttribute="trailing" id="wQL-eo-qmO"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="chooseFloorBtn" destination="L8y-YT-phI" id="3gY-Wy-btH"/>
                         <outlet property="chooseFloorView" destination="T5Z-by-uRQ" id="JwD-rq-9Ub"/>
+                        <outlet property="distanceLbl" destination="wb2-sn-zPL" id="6Kw-bu-zqs"/>
                         <outlet property="mapView" destination="2v8-6a-1El" id="xcs-HD-fsn"/>
                         <outlet property="panGestureRecognizer" destination="QKt-0d-rhr" id="p9J-gF-XGj"/>
                         <outlet property="pinchGestureRecognizer" destination="Tqv-tx-gsl" id="eCE-n9-aW7"/>

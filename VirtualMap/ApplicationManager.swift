@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-
+import Alamofire
 
 var gotFloor: Floor?
 class ApplicationManager {
@@ -31,9 +31,30 @@ class ApplicationManager {
     func gotRangedBeaconsInfo(_ rangingBeacons: [BeaconRangingData]) -> () {
         Logger.logMessage(message: "all ranged beacons: \(rangingBeacons)", level: .info)
         let currentUserLocation = geoLocation.getBeaconPoint(beaconRangingData: rangingBeacons, beaconsFromAPI: allBeaconsFromAPI)
-        self.currentUserPoint(currentUserLocation.0, currentUserLocation.1)
+        getCorrectedPosition(position: currentUserLocation.0, beacon: currentUserLocation.1)
         for beacon in rangingBeacons {
             Logger.logMessage(message: "Distance is : \(beacon.distance)", level: .info)
+        }
+    }
+    
+    private func getCorrectedPosition(position: CurrentUserLocation, beacon:[BeaconRangingPoint]) {
+        
+        let mapId = 1
+        let floorId = 1
+        if(position.isLocated) {
+            let xPos = Int((position.point?.x)!)
+            let yPos = Int((position.point?.y)!)
+            let url = "https://teleroamer.com/api/v1/position/correct?x=\(xPos)&y=\(yPos)&map=\(mapId)&floor=\(floorId)"
+            Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
+                
+                let result = response.result
+                
+                if let dict = result.value as? Dictionary<String, Any>{
+                    position.point = CGPoint(x: Int(dict["x"] as! String)!, y: Int(dict["y"] as! String)!)
+                    self.currentUserPoint(position, beacon)
+                }
+                
+            }
         }
     }
     

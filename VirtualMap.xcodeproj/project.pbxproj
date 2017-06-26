@@ -55,6 +55,8 @@
 		AC7C7C4D1EFD5DD200A51CCB /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C4C1EFD5DD200A51CCB /* Position.swift */; };
 		AC7C7C4F1EFD6A0B00A51CCB /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C4E1EFD6A0B00A51CCB /* Square.swift */; };
 		AC7C7C511F00E44A00A51CCB /* Travolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C501F00E44A00A51CCB /* Travolator.swift */; };
+		AC7C7C531F00F96800A51CCB /* Stairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C521F00F96800A51CCB /* Stairs.swift */; };
+		AC7C7C551F01055E00A51CCB /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7C7C541F01055E00A51CCB /* Stack.swift */; };
 		EF8A48DAFC6FF22E04B2BA42 /* Pods_VirtualMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65DA63BCFF4B5C38D3205E3 /* Pods_VirtualMap.framework */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +121,8 @@
 		AC7C7C4C1EFD5DD200A51CCB /* Position.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		AC7C7C4E1EFD6A0B00A51CCB /* Square.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
 		AC7C7C501F00E44A00A51CCB /* Travolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Travolator.swift; sourceTree = "<group>"; };
+		AC7C7C521F00F96800A51CCB /* Stairs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stairs.swift; sourceTree = "<group>"; };
+		AC7C7C541F01055E00A51CCB /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		C35D47E264C85D47229344F2 /* Pods-VirtualMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirtualMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VirtualMap/Pods-VirtualMap.debug.xcconfig"; sourceTree = "<group>"; };
 		E65DA63BCFF4B5C38D3205E3 /* Pods_VirtualMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VirtualMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -246,7 +250,9 @@
 				9A7E499E1EED9AD800418159 /* Beacon.swift */,
 				AC7C7C481EFD59DC00A51CCB /* Elevator.swift */,
 				AC7C7C501F00E44A00A51CCB /* Travolator.swift */,
+				AC7C7C521F00F96800A51CCB /* Stairs.swift */,
 				AC7C7C4C1EFD5DD200A51CCB /* Position.swift */,
+				AC7C7C541F01055E00A51CCB /* Stack.swift */,
 			);
 			name = FloorContent;
 			sourceTree = "<group>";
@@ -450,6 +456,7 @@
 				9A7E49C71EED9D6900418159 /* BeaconDelegate.swift in Sources */,
 				9A7E49D71EED9F0800418159 /* NSDictionaryUtility.swift in Sources */,
 				9A7E48081EED933900418159 /* MapViewController.swift in Sources */,
+				AC7C7C551F01055E00A51CCB /* Stack.swift in Sources */,
 				9A7E49AA1EED9BAC00418159 /* BeaconRangingPoint.swift in Sources */,
 				9A7E49DF1EED9F5000418159 /* CurrentAPIClient.swift in Sources */,
 				9A7E49C41EED9D6900418159 /* TestBeaconManager.swift in Sources */,
@@ -477,6 +484,7 @@
 				9A7E498E1EED9A7400418159 /* Circle.swift in Sources */,
 				9A7E49BA1EED9D0900418159 /* CoordinatesConverter.swift in Sources */,
 				9A7E498F1EED9A7400418159 /* BeaconCircle.swift in Sources */,
+				AC7C7C531F00F96800A51CCB /* Stairs.swift in Sources */,
 				9A7E49A21EED9AD800418159 /* Beacon.swift in Sources */,
 				AC7C7C4B1EFD5AF300A51CCB /* SquareCoordinates.swift in Sources */,
 				AC7C7C491EFD59DC00A51CCB /* Elevator.swift in Sources */,
