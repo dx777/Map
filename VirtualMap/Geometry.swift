@@ -24,7 +24,9 @@ class Geometry {
         var res : Bool = true
         
         var cf : Double = PR / L
-        
+        if(cf.isNaN) {
+            return coords
+        }
         if(cf < 0) {
             cf = 0
             res = false
@@ -58,5 +60,36 @@ class Geometry {
                 return coords
             }
         }
+    }
+    
+    /* Distance from a point (p1) to line l1 l2 */
+    static func distanceFromPoint(p: CGPoint, toLineSegment v: CGPoint, and w: CGPoint) -> Double {
+        let pv_dx = p.x - v.x
+        let pv_dy = p.y - v.y
+        let wv_dx = w.x - v.x
+        let wv_dy = w.y - v.y
+        
+        let dot = pv_dx * wv_dx + pv_dy * wv_dy
+        let len_sq = wv_dx * wv_dx + wv_dy * wv_dy
+        let param = dot / len_sq
+        
+        var int_x, int_y: CGFloat /* intersection of normal to vw that goes through p */
+        
+        if param < 0 || (v.x == w.x && v.y == w.y) {
+            int_x = v.x
+            int_y = v.y
+        } else if param > 1 {
+            int_x = w.x
+            int_y = w.y
+        } else {
+            int_x = v.x + param * wv_dx
+            int_y = v.y + param * wv_dy
+        }
+        
+        /* Components of normal */
+        let dx = p.x - int_x
+        let dy = p.y - int_y
+        
+        return sqrt(Double(dx * dx + dy * dy))
     }
 }

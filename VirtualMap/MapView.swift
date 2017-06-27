@@ -32,6 +32,7 @@ class MapView: UIView {
     private let userRawFrameColor = UIColor.lightGray
     private let lineWidthOfuserRawFrame: CGFloat = 0.8
     private let line = CAShapeLayer()
+    private let doneLine = CAShapeLayer()
     static var pinImage = UIImageView()
     
     
@@ -49,14 +50,15 @@ class MapView: UIView {
         let circles = mapWithScaleCoordinaates.circles
         let squares = mapWithScaleCoordinaates.squares
         
-        if MapViewController.arrayOfPointsToDraw.isEmpty == false{
-            drawRoute()
-            
-        }
         
         drawLines(lines: lines)
         drawCircles(circles: circles)
         drawSquares(squares: squares)
+        
+        if MapViewController.arrayOfPointsToDraw.isEmpty == false{
+            drawRoute()
+            
+        }
         
         
     }
@@ -235,19 +237,72 @@ class MapView: UIView {
     }
     
     fileprivate func drawRoute() {
-        
         let linePath = UIBezierPath()
-        linePath.move(to: MapViewController.arrayOfPointsToDraw[0])
-        for point in MapViewController.arrayOfPointsToDraw {
-            linePath.addLine(to: point)
+        if(currentUserLocation.isOnPath) {
+            var attachedCoordinates : [CGPoint] = []
+            // Получаем координаты позиции пользователя на каждую линию маршрута
+            for i in 1..<MapViewController.arrayOfPointsToDraw.count {
+                let coordinateForAttach = Geometry.getAttachedCoordinates(x: Int((MapViewController.currentUserLoc?.x)!), y: Int((MapViewController.currentUserLoc?.y)!), x1: Int(MapViewController.arrayOfPointsToDraw[i - 1].x), x2: Int(MapViewController.arrayOfPointsToDraw[i].x), y1: Int(MapViewController.arrayOfPointsToDraw[i - 1].y), y2: Int(MapViewController.arrayOfPointsToDraw[i].y))
+                attachedCoordinates.append(CGPoint(x: coordinateForAttach[0], y: coordinateForAttach[1]))
+            }
+            // Получаем найменьшее значение
+            var minIndex = 0
+            var minDistance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[0].x), y1: Double(attachedCoordinates[0].x), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
+            var distance = 0.0
+            for i in 1..<attachedCoordinates.count {
+                distance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[i].x), y1: Double(attachedCoordinates[i].y), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
+                if(minDistance > distance) {
+                    minDistance = distance
+                    minIndex = i
+                }
+            }
             
+            minIndex = minIndex + 1
+            
+            let doneLinePath = UIBezierPath()
+            
+            doneLinePath.move(to: MapViewController.arrayOfPointsToDraw[0])
+            
+            for i in 0..<minIndex {
+                doneLinePath.addLine(to: MapViewController.arrayOfPointsToDraw[i])
+            }
+            doneLinePath.addLine(to: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!))
+            
+            linePath.move(to: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!))
+    
+            var totalLength : Double = 0.0
+            var prevPoint : CGPoint = CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!)
+            prevPoint = unscaleTappedPoint(tappedPoint: prevPoint, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
+            for i in minIndex..<MapViewController.arrayOfPointsToDraw.count {
+                linePath.addLine(to: MapViewController.arrayOfPointsToDraw[i])
+                let point : CGPoint = unscaleTappedPoint(tappedPoint: MapViewController.arrayOfPointsToDraw[i], scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
+                totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(point.x), y2: Double(point.y))
+                prevPoint = point
+            }
+        
+            let dataDict:[String: Double] = ["distance": totalLength]
+            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil, userInfo: dataDict)
+            
+            doneLine.path = doneLinePath.cgPath
+            doneLine.strokeColor = UIColor(red: 90.0 / 255.0, green: 169.0 / 255.0, blue: 221.0 / 255.0, alpha: 0.5).cgColor
+            doneLine.lineWidth = 3
+            doneLine.lineJoin = kCALineJoinRound
+            doneLine.fillColor = UIColor.clear.cgColor
+            self.layer.insertSublayer(doneLine, at: 0)
+        } else {
+            linePath.move(to: MapViewController.arrayOfPointsToDraw[0])
+            for point in MapViewController.arrayOfPointsToDraw {
+                linePath.addLine(to: point)
+            }
         }
+        
         line.path = linePath.cgPath
         line.strokeColor = UIColor(red: 90.0 / 255.0, green: 169.0 / 255.0, blue: 221.0 / 255.0, alpha: 1.0).cgColor
         line.lineWidth = 3
         line.lineJoin = kCALineJoinRound
         line.fillColor = UIColor.clear.cgColor
-        self.layer.addSublayer(line)
+        self.layer.insertSublayer(line, at: 0)
         
         let lastpoint = MapViewController.arrayOfPointsToDraw.last
         
@@ -259,8 +314,6 @@ class MapView: UIView {
         MapView.pinImage.contentMode = UIViewContentMode.scaleAspectFill
         self.addSubview(MapView.pinImage)
         MapView.pinImage.center = (lastpoint)!
-        
-        
         
     }
     
@@ -334,6 +387,12 @@ class MapView: UIView {
         shapeLayer.lineWidth = frameWidth
         shapeLayer.strokeColor = frameColor
         layer.addSublayer(shapeLayer)
+    }
+    
+    
+    private func unscaleTappedPoint (tappedPoint: CGPoint, scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> CGPoint {
+        return CGPoint(x: Int(CGFloat(tappedPoint.x - offsetX) / scale) , y: Int(CGFloat(tappedPoint.y - offsetY) / scale))
+        
     }
 }
 

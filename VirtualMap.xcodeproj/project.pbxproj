@@ -357,7 +357,7 @@
 				TargetAttributes = {
 					9A7E48011EED933900418159 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = BA5N2CG5VC;
+						DevelopmentTeam = ADS9SM6N7X;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -615,7 +615,7 @@
 			baseConfigurationReference = C35D47E264C85D47229344F2 /* Pods-VirtualMap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = BA5N2CG5VC;
+				DEVELOPMENT_TEAM = ADS9SM6N7X;
 				INFOPLIST_FILE = VirtualMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -635,7 +635,7 @@
 			baseConfigurationReference = 33F23F03D473BE213C1AC3EA /* Pods-VirtualMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = BA5N2CG5VC;
+				DEVELOPMENT_TEAM = ADS9SM6N7X;
 				INFOPLIST_FILE = VirtualMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

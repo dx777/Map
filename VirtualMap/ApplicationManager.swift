@@ -53,7 +53,6 @@ class ApplicationManager {
                     position.point = CGPoint(x: Int(dict["x"] as! String)!, y: Int(dict["y"] as! String)!)
                     self.currentUserPoint(position, beacon)
                 }
-                
             }
         }
     }

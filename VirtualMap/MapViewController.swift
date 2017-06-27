@@ -22,6 +22,8 @@ class MapViewController: UIViewController  {
     static var arrayOfPointsToDraw = [CGPoint]()
     static var switchingMode = false
     static var onApplicationStarted = false
+    static var attachPoint = true
+    private var DISTANCE_MULTIPLIER = 112.1 // 112.1 я высчитано из того что приходит с сервера. Посчитал суму длины всех линий маршрута (unscaled) и сделал соотношение что 112.1 это 1м (исходя из примеров с Android версии)
     
     var locationManager: CLLocationManager = CLLocationManager()
     var button: UIButton!
@@ -51,7 +53,8 @@ class MapViewController: UIViewController  {
     override func viewDidLoad() {
         
         
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.changeDistance(_:)), name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil)
+
 
         
         
@@ -129,15 +132,11 @@ class MapViewController: UIViewController  {
     }
     
     func unscaleTappedPoint (tappedPoint: CGPoint, scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> CGPoint {
-        
-        return CGPoint(x: Int(CGFloat(tappedPoint.x) / scale - offsetX) , y: Int(CGFloat(tappedPoint.y) / scale - offsetY))
-        
+        return CGPoint(x: Int(CGFloat(tappedPoint.x - offsetX) / scale) , y: Int(CGFloat(tappedPoint.y - offsetY) / scale))
     }
     
     func scaleCoordinate (coordinate: CGPoint, scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> CGPoint {
         return CGPoint(x: Int(CGFloat(coordinate.x) * scale + offsetX) , y: Int(CGFloat(coordinate.y) * scale + offsetY))
-        
-        
     }
     
     
@@ -346,15 +345,22 @@ class MapViewController: UIViewController  {
                 MapViewController.arrayOfPointsToDraw.append(scaledCoordinate)
                 
                 if(MapViewController.arrayOfPointsToDraw.count > 1) {
-                    totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(scaledCoordinate.x), y2: Double(scaledCoordinate.y))
+                    totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(coordinate.x), y2: Double(coordinate.y))
                 }
-                prevPoint = CGPoint(x: Double(scaledCoordinate.x), y: Double(scaledCoordinate.y))
+                prevPoint = CGPoint(x: Double(coordinate.x), y: Double(coordinate.y))
             }
-            totalLength /= 41.7
+            
+            totalLength /= DISTANCE_MULTIPLIER
             self.distanceLbl.text = String(format: "%li м", Int(totalLength))
             
         }
         
+    }
+    
+    func changeDistance(_ notification: NSNotification) {
+        if let distance = notification.userInfo?["distance"] as? Double {
+            self.distanceLbl.text = String(format: "%li м", Int(distance / DISTANCE_MULTIPLIER))
+        }
     }
     
     func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
@@ -464,6 +470,7 @@ class MapViewController: UIViewController  {
         
     }
     
-    
-    
+    @IBAction func test(_ sender: Any) {
+        MapViewController.attachPoint = !MapViewController.attachPoint
+    }
 }

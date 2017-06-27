@@ -63,10 +63,22 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUr-Zx-uPS">
+                                        <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="test:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jFT-HX-2Ov"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.381203711" green="0.62503105400000003" blue="0.9087159038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="wb2-sn-zPL" firstAttribute="centerX" secondItem="Jbm-NS-lq4" secondAttribute="centerX" id="2RT-jk-9B9"/>
+                                    <constraint firstAttribute="bottom" secondItem="iUr-Zx-uPS" secondAttribute="bottom" id="DuF-l3-FDB"/>
+                                    <constraint firstItem="iUr-Zx-uPS" firstAttribute="top" secondItem="Jbm-NS-lq4" secondAttribute="top" id="FU7-b6-4HL"/>
+                                    <constraint firstItem="iUr-Zx-uPS" firstAttribute="leading" secondItem="Jbm-NS-lq4" secondAttribute="leading" id="Lun-Yb-pB9"/>
                                     <constraint firstItem="wb2-sn-zPL" firstAttribute="centerY" secondItem="Jbm-NS-lq4" secondAttribute="centerY" id="bEy-2q-TAo"/>
                                     <constraint firstAttribute="height" constant="30" id="wJn-zX-QfC"/>
                                 </constraints>
