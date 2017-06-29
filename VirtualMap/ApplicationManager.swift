@@ -39,12 +39,15 @@ class ApplicationManager {
     
     private func getCorrectedPosition(position: CurrentUserLocation, beacon:[BeaconRangingPoint]) {
         
-        let mapId = 1
-        let floorId = 1
+        var mapId = 1
+        var floorId = 1
         if(position.isLocated) {
             let xPos = Int((position.point?.x)!)
             let yPos = Int((position.point?.y)!)
+            mapId = autoShopId
+            floorId = autofloor
             let url = "https://teleroamer.com/api/v1/position/correct?x=\(xPos)&y=\(yPos)&map=\(mapId)&floor=\(floorId)"
+            Logger.logMessage(message: url, level: .info)
             Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { response in
                 
                 let result = response.result

@@ -70,6 +70,7 @@ class MapViewController: UIViewController  {
         dropDown.show()
         dropDown.direction = .bottom
         dropDown.width = 100
+        dropDown.dataSource = ["Test", "Test", "Test"]
         dropDown.bottomOffset = CGPoint(x: 0, y:(dropDown.anchorView?.plainView.bounds.height)!)
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             print("Selected item: \(item) at index: \(index)")
@@ -330,8 +331,6 @@ class MapViewController: UIViewController  {
         
         
         if currentPoints != nil && (currentPoints?.count)! > 0{
-            var totalLength : Double = 0
-            var prevPoint: CGPoint = CGPoint(x: 0, y: 0)
             for point in currentPoints! {
                 let x = point["x"] as? Int
                 let y = point["y"] as? Int
@@ -340,21 +339,38 @@ class MapViewController: UIViewController  {
                 var scaledCoordinate = scaleCoordinate(coordinate: coordinate, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
                 
                 if(MapViewController.arrayOfPointsToDraw.count == 0) {
-                    scaledCoordinate = MapViewController.currentUserLoc!
+                    if autoShopId == MapViewController.currentShop && autofloor == MapViewController.currentFloor {
+                        scaledCoordinate = MapViewController.currentUserLoc!
+                    }
                 }
                 MapViewController.arrayOfPointsToDraw.append(scaledCoordinate)
+            }
+        }
+        var totalLength : Double = 0
+        var prevPoint: CGPoint = CGPoint(x: 0, y: 0)
+        for floorKey in pointsDict.keys {
+            for point in pointsDict["\(floorKey)"]! {
+                let x = point["x"] as? Int
+                let y = point["y"] as? Int
+                let coordinate = CGPoint(x: x!, y: y!)
+                
+                var scaledCoordinate = scaleCoordinate(coordinate: coordinate, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
+                
+                if(MapViewController.arrayOfPointsToDraw.count == 0) {
+                    if autoShopId == MapViewController.currentShop && autofloor == MapViewController.currentFloor {
+                        scaledCoordinate = MapViewController.currentUserLoc!
+                    }
+                }
                 
                 if(MapViewController.arrayOfPointsToDraw.count > 1) {
                     totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(coordinate.x), y2: Double(coordinate.y))
                 }
                 prevPoint = CGPoint(x: Double(coordinate.x), y: Double(coordinate.y))
             }
-            
-            totalLength /= DISTANCE_MULTIPLIER
-            self.distanceLbl.text = String(format: "%li м", Int(totalLength))
-            
         }
         
+        totalLength /= DISTANCE_MULTIPLIER
+        self.distanceLbl.text = String(format: "%li м", Int(totalLength))
     }
     
     func changeDistance(_ notification: NSNotification) {

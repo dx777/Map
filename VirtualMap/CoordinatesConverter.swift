@@ -13,7 +13,7 @@ class CoordinatesConverter {
     private(set) var boundsHeight: CGFloat
     private(set) var paddingX: Int
     private(set) var paddingY: Int
-    private var ATTACH_DISTANCE : Double = 60
+    private var ATTACH_DISTANCE : Double = 30
     static var unScaledUserPoint: CGPoint?
     static var scale: CGFloat!
     static var offsets: MapOffset!
@@ -83,23 +83,20 @@ class CoordinatesConverter {
             
             // Если у нас есть построенный маршрут
             if MapViewController.arrayOfPointsToDraw.isEmpty == false {
-                var attachedCoordinates : [CGPoint] = []
+                var pointsCoordinates : [CGPoint] = []
                 // Получаем координаты позиции пользователя на каждую линию маршрута
                 for i in 0..<MapViewController.arrayOfPointsToDraw.count {
-//                    let coordinateForAttach = Geometry.getAttachedCoordinates(x: Int(circleForUser.x), y: Int(circleForUser.y), x1: Int(MapViewController.arrayOfPointsToDraw[i - 1].x), x2: Int(MapViewController.arrayOfPointsToDraw[i].x), y1: Int(MapViewController.arrayOfPointsToDraw[i - 1].y), y2: Int(MapViewController.arrayOfPointsToDraw[i].y))
-//                    attachedCoordinates.append(CGPoint(x: coordinateForAttach[0], y: coordinateForAttach[1]))
-                    attachedCoordinates.append(MapViewController.arrayOfPointsToDraw[i])
+                    pointsCoordinates.append(MapViewController.arrayOfPointsToDraw[i])
                 }
                 
                 // Получаем найменьшее значение
                 var minIndex = 0
-                var minDistance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[0].x), y1: Double(attachedCoordinates[0].x), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
-                minDistance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: attachedCoordinates[0].x, y: attachedCoordinates[0].y), and: CGPoint(x: attachedCoordinates[1].x, y: attachedCoordinates[1].y))
+                var minDistance = Geometry.distanceBetweenPoints(x1: Double(pointsCoordinates[0].x), y1: Double(pointsCoordinates[0].x), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
+                minDistance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: pointsCoordinates[0].x, y: pointsCoordinates[0].y), and: CGPoint(x: pointsCoordinates[1].x, y: pointsCoordinates[1].y))
                 var distance = 0.0
                 var distances : [Double] = []
-                for i in 1..<attachedCoordinates.count {
-//                    distance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[i].x), y1: Double(attachedCoordinates[i].y), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
-                    distance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: attachedCoordinates[i-1].x, y: attachedCoordinates[i-1].y), and: CGPoint(x: attachedCoordinates[i].x, y: attachedCoordinates[i].y))
+                for i in 1..<pointsCoordinates.count {
+                    distance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: pointsCoordinates[i-1].x, y: pointsCoordinates[i-1].y), and: CGPoint(x: pointsCoordinates[i].x, y: pointsCoordinates[i].y))
                     distances.append(distance)
                     if(minDistance > distance) {
                         minDistance = distance
@@ -108,19 +105,26 @@ class CoordinatesConverter {
                 }
                 
                 if(minDistance < ATTACH_DISTANCE && MapViewController.attachPoint) {
+                    var coordinate : [Int]
+                    // Если ближайшая линия это первая линия пути, и минимальный индекс нулевой, что бы не вышло ниже за предел масива, увеличиваем на 1. Это та же самая линия, просто другая ее точка
                     if(minIndex == 0) {
-                        if(attachedCoordinates.count > 1) {
+                        if(pointsCoordinates.count > 1) {
                             minIndex = 1
+                            coordinate = Geometry.getAttachedCoordinates(x: Int(circleForUser.x), y: Int(circleForUser.y), x1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].x), x2: Int(MapViewController.arrayOfPointsToDraw[minIndex].x), y1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].y), y2: Int(MapViewController.arrayOfPointsToDraw[minIndex].y))
+                        } else {
+                            coordinate = [circleForUser.x, circleForUser.y]
                         }
+                    } else {
+                        coordinate = Geometry.getAttachedCoordinates(x: Int(circleForUser.x), y: Int(circleForUser.y), x1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].x), x2: Int(MapViewController.arrayOfPointsToDraw[minIndex].x), y1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].y), y2: Int(MapViewController.arrayOfPointsToDraw[minIndex].y))
                     }
-                    var coordinate = Geometry.getAttachedCoordinates(x: Int(circleForUser.x), y: Int(circleForUser.y), x1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].x), x2: Int(MapViewController.arrayOfPointsToDraw[minIndex].x), y1: Int(MapViewController.arrayOfPointsToDraw[minIndex - 1].y), y2: Int(MapViewController.arrayOfPointsToDraw[minIndex].y))
+                    
                     circleForUser = UserCircle(x: Int(coordinate[0]), y: Int(coordinate[1]))
                     MapViewController.currentUserLoc = CGPoint(x: Int(coordinate[0]), y: Int(coordinate[1]))
                     currentUserLocation.isOnPath = true
                 } else {
                     currentUserLocation.isOnPath = false
                 }
-                Logger.logMessage(message: "Distances:\n\(distances)\nMinIndex:\(minIndex)", level: .info)
+                Logger.logMessage(message: "Distances:\n\(distances)\nMinIndex: \(minIndex)", level: .info)
                 
             } else {
                 Logger.logMessage(message: "\([circleForUser.x, circleForUser.y])", level: .info)

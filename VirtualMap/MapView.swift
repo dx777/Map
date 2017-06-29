@@ -238,7 +238,7 @@ class MapView: UIView {
     
     fileprivate func drawRoute() {
         let linePath = UIBezierPath()
-        if(currentUserLocation.isOnPath) {
+        if(currentUserLocation.isOnPath && currentUserLocation.isLocated) {
             var attachedCoordinates : [CGPoint] = []
             // Получаем координаты позиции пользователя на каждую линию маршрута
             for i in 1..<MapViewController.arrayOfPointsToDraw.count {
@@ -279,7 +279,7 @@ class MapView: UIView {
                 totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(point.x), y2: Double(point.y))
                 prevPoint = point
             }
-        
+            
             let dataDict:[String: Double] = ["distance": totalLength]
             
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil, userInfo: dataDict)
