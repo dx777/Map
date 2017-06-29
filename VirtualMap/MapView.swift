@@ -57,7 +57,8 @@ class MapView: UIView {
         
         if MapViewController.arrayOfPointsToDraw.isEmpty == false{
             drawRoute()
-            
+        } else {
+            MapView.pinImage.removeFromSuperview()
         }
         
         
@@ -270,19 +271,9 @@ class MapView: UIView {
             
             linePath.move(to: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!))
     
-            var totalLength : Double = 0.0
-            var prevPoint : CGPoint = CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!)
-            prevPoint = unscaleTappedPoint(tappedPoint: prevPoint, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
             for i in minIndex..<MapViewController.arrayOfPointsToDraw.count {
                 linePath.addLine(to: MapViewController.arrayOfPointsToDraw[i])
-                let point : CGPoint = unscaleTappedPoint(tappedPoint: MapViewController.arrayOfPointsToDraw[i], scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
-                totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(point.x), y2: Double(point.y))
-                prevPoint = point
             }
-            
-            let dataDict:[String: Double] = ["distance": totalLength]
-            
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil, userInfo: dataDict)
             
             doneLine.path = doneLinePath.cgPath
             doneLine.strokeColor = UIColor(red: 90.0 / 255.0, green: 169.0 / 255.0, blue: 221.0 / 255.0, alpha: 0.5).cgColor

@@ -6,6 +6,7 @@ var locY: Int?
 var userPoint: CGPoint?
 
 var pointsDict = [String:[Dictionary <String, Any>]]()
+var DISTANCE_MULTIPLIER = 112.1 // 112.1 я высчитано из того что приходит с сервера. Посчитал суму длины всех линий маршрута (unscaled) и сделал соотношение что 112.1 это 1м (исходя из примеров с Android версии)
 
 
 class CoordinatesConverter {
@@ -104,7 +105,7 @@ class CoordinatesConverter {
                     }
                 }
                 
-                if(minDistance < ATTACH_DISTANCE && MapViewController.attachPoint) {
+                if(minDistance < ATTACH_DISTANCE) {
                     var coordinate : [Int]
                     // Если ближайшая линия это первая линия пути, и минимальный индекс нулевой, что бы не вышло ниже за предел масива, увеличиваем на 1. Это та же самая линия, просто другая ее точка
                     if(minIndex == 0) {
@@ -270,7 +271,7 @@ class CoordinatesConverter {
         
     }
     
-    private func unscaleTappedPoint (tappedPoint: CGPoint, scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> CGPoint {
+    static func unscaleTappedPoint (tappedPoint: CGPoint, scale: CGFloat, offsetX: CGFloat, offsetY: CGFloat) -> CGPoint {
         //        return CGPoint(x: Int(CGFloat(tappedPoint.x) * scale + offsetX) , y: Int(CGFloat(tappedPoint.y) * scale + offsetY))
         return CGPoint(x: Int(CGFloat(tappedPoint.x) / scale - offsetX) , y: Int(CGFloat(tappedPoint.y) / scale - offsetY))
         
@@ -281,8 +282,6 @@ class CoordinatesConverter {
         return CGPoint(x: Int(CGFloat(userPoint.x) / scale - offsetX) , y: Int(CGFloat(userPoint.y) / scale - offsetY))
         
     }
-    
-
     
 
     

@@ -64,12 +64,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUr-Zx-uPS">
-                                        <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
-                                        <state key="normal" title="Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="79" height="30"/>
+                                        <state key="normal" title="Reset route">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="test:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jFT-HX-2Ov"/>
+                                            <action selector="resetRoute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hFb-ae-6CD"/>
                                         </connections>
                                     </button>
                                 </subviews>

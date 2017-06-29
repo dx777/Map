@@ -55,9 +55,76 @@ class ApplicationManager {
                 if let dict = result.value as? Dictionary<String, Any>{
                     position.point = CGPoint(x: Int(dict["x"] as! String)!, y: Int(dict["y"] as! String)!)
                     self.currentUserPoint(position, beacon)
+                    self.getTotalDistance(position: position)
                 }
             }
+        } else {
+            getTotalDistance(position: position)
         }
+    }
+    
+    //Считаем общую дистанцию
+    private func getTotalDistance(position: CurrentUserLocation) {
+        var totalLength : Double = 0
+        var prevPoint: CGPoint = CGPoint(x: 0, y: 0)
+        var skip: Bool = false
+        for floorKey in pointsDict.keys {
+            if(Int(floorKey) == autofloor) {
+                if(pointsDict["\(floorKey)"]!.count == 0 || (MapViewController.currentUserLoc == nil)) {
+                    continue
+                }
+                Logger.logMessage(message: NSStringFromCGPoint(MapViewController.currentUserLoc!), level: .info)
+                var attachedCoordinates : [CGPoint] = []
+                // Получаем координаты позиции пользователя на каждую линию маршрута
+                for i in 1..<pointsDict["\(floorKey)"]!.count {
+                    let coordinate = CGPoint(x: (pointsDict["\(floorKey)"]![i]["x"] as? Int)!, y: (pointsDict["\(floorKey)"]![i]["y"] as? Int)!)
+                    let prevCoordinate = CGPoint(x: (pointsDict["\(floorKey)"]![i-1]["x"] as? Int)!, y: (pointsDict["\(floorKey)"]![i-1]["y"] as? Int)!)
+                    let coordinateForAttach = Geometry.getAttachedCoordinates(x: Int((MapViewController.currentUserLoc?.x)!), y: Int((MapViewController.currentUserLoc?.y)!), x1: Int(prevCoordinate.x), x2: Int(coordinate.x), y1: Int(prevCoordinate.y), y2: Int(coordinate.y))
+                    attachedCoordinates.append(CGPoint(x: coordinateForAttach[0], y: coordinateForAttach[1]))
+                }
+                // Получаем найменьшее значение
+                var minIndex = 0
+                var minDistance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[0].x), y1: Double(attachedCoordinates[0].x), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
+                var distance = 0.0
+                for i in 1..<attachedCoordinates.count {
+                    distance = Geometry.distanceBetweenPoints(x1: Double(attachedCoordinates[i].x), y1: Double(attachedCoordinates[i].y), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
+                    if(minDistance > distance) {
+                        minDistance = distance
+                        minIndex = i
+                    }
+                }
+                
+                minIndex = minIndex + 1
+                var prevPoint : CGPoint = CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!)
+                prevPoint = CoordinatesConverter.unscaleTappedPoint(tappedPoint: prevPoint, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
+                for i in minIndex..<pointsDict["\(floorKey)"]!.count {
+                    let point = CGPoint(x: (pointsDict["\(floorKey)"]![i]["x"] as? Int)!, y: (pointsDict["\(floorKey)"]![i]["y"] as? Int)!)
+                    totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(point.x), y2: Double(point.y))
+                    prevPoint = point
+                }
+            } else {
+                for point in pointsDict["\(floorKey)"]! {
+                        let x = point["x"] as? Int
+                        let y = point["y"] as? Int
+                        let coordinate = CGPoint(x: x!, y: y!)
+                        
+                        if(skip) {
+                            totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(coordinate.x), y2: Double(coordinate.y))
+                        }
+                        prevPoint = CGPoint(x: Double(coordinate.x), y: Double(coordinate.y))
+                        skip = true
+                }
+            }
+            skip = false
+        }
+        
+        totalLength /= DISTANCE_MULTIPLIER
+        
+        Logger.logMessage(message: "Total length: \(totalLength)", level: .info)
+        
+        let dataDict:[String: Double] = ["distance": totalLength]
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil, userInfo: dataDict)
     }
     
     private func getMap(path: String) {

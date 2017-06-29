@@ -22,8 +22,6 @@ class MapViewController: UIViewController  {
     static var arrayOfPointsToDraw = [CGPoint]()
     static var switchingMode = false
     static var onApplicationStarted = false
-    static var attachPoint = true
-    private var DISTANCE_MULTIPLIER = 112.1 // 112.1 я высчитано из того что приходит с сервера. Посчитал суму длины всех линий маршрута (unscaled) и сделал соотношение что 112.1 это 1м (исходя из примеров с Android версии)
     
     var locationManager: CLLocationManager = CLLocationManager()
     var button: UIButton!
@@ -112,14 +110,14 @@ class MapViewController: UIViewController  {
                 
                 
                 
-                                pinImage.removeFromSuperview()
-                                let pin = UIImage(named: "pin")
-                                pinImage.removeFromSuperview()
-                                pinImage.image = pin
-                                pinImage.frame = CGRectMake(touchPoint.x, touchPoint.y, 40, 40)
-                                pinImage.contentMode = UIViewContentMode.scaleAspectFill
-                                self.mapView.addSubview(pinImage)
-                                pinImage.center = touchPoint
+//                                pinImage.removeFromSuperview()
+//                                let pin = UIImage(named: "pin")
+//                                pinImage.removeFromSuperview()
+//                                pinImage.image = pin
+//                                pinImage.frame = CGRectMake(touchPoint.x, touchPoint.y, 40, 40)
+//                                pinImage.contentMode = UIViewContentMode.scaleAspectFill
+//                                self.mapView.addSubview(pinImage)
+//                                pinImage.center = touchPoint
                 
             }
             
@@ -340,42 +338,23 @@ class MapViewController: UIViewController  {
                 
                 if(MapViewController.arrayOfPointsToDraw.count == 0) {
                     if autoShopId == MapViewController.currentShop && autofloor == MapViewController.currentFloor {
-                        scaledCoordinate = MapViewController.currentUserLoc!
+                        if((MapViewController.currentUserLoc) != nil) {
+                            scaledCoordinate = MapViewController.currentUserLoc!
+                        }
                     }
                 }
                 MapViewController.arrayOfPointsToDraw.append(scaledCoordinate)
             }
         }
-        var totalLength : Double = 0
-        var prevPoint: CGPoint = CGPoint(x: 0, y: 0)
-        for floorKey in pointsDict.keys {
-            for point in pointsDict["\(floorKey)"]! {
-                let x = point["x"] as? Int
-                let y = point["y"] as? Int
-                let coordinate = CGPoint(x: x!, y: y!)
-                
-                var scaledCoordinate = scaleCoordinate(coordinate: coordinate, scale: CoordinatesConverter.scale, offsetX: CoordinatesConverter.offsets.offsetX, offsetY: CoordinatesConverter.offsets.offsetY)
-                
-                if(MapViewController.arrayOfPointsToDraw.count == 0) {
-                    if autoShopId == MapViewController.currentShop && autofloor == MapViewController.currentFloor {
-                        scaledCoordinate = MapViewController.currentUserLoc!
-                    }
-                }
-                
-                if(MapViewController.arrayOfPointsToDraw.count > 1) {
-                    totalLength += Geometry.distanceBetweenPoints(x1: Double(prevPoint.x), y1: Double(prevPoint.y), x2: Double(coordinate.x), y2: Double(coordinate.y))
-                }
-                prevPoint = CGPoint(x: Double(coordinate.x), y: Double(coordinate.y))
-            }
-        }
-        
-        totalLength /= DISTANCE_MULTIPLIER
-        self.distanceLbl.text = String(format: "%li м", Int(totalLength))
     }
     
     func changeDistance(_ notification: NSNotification) {
-        if let distance = notification.userInfo?["distance"] as? Double {
-            self.distanceLbl.text = String(format: "%li м", Int(distance / DISTANCE_MULTIPLIER))
+        if(pointsDict.isEmpty) {
+            self.distanceLbl.text = ""
+        } else {
+            if let distance = notification.userInfo?["distance"] as? Double {
+                self.distanceLbl.text = String(format: "%li м", Int(distance))
+            }
         }
     }
     
@@ -437,17 +416,16 @@ class MapViewController: UIViewController  {
 
                     
                 }
-                
-                
-                
-                
-                
             }
             
             
         }
         
         
+    }
+    @IBAction func resetRoute(_ sender: Any) {
+        pointsDict = [:]
+        MapViewController.arrayOfPointsToDraw = []
     }
     
     @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
@@ -484,9 +462,5 @@ class MapViewController: UIViewController  {
             }
         
         
-    }
-    
-    @IBAction func test(_ sender: Any) {
-        MapViewController.attachPoint = !MapViewController.attachPoint
     }
 }
