@@ -72,14 +72,25 @@
                                             <action selector="resetRoute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hFb-ae-6CD"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w9Q-Ai-Jpq">
+                                        <rect key="frame" x="320" y="0.0" width="47" height="30"/>
+                                        <state key="normal" title="Center">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="centerToUser:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZoK-Qq-psB"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.381203711" green="0.62503105400000003" blue="0.9087159038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="wb2-sn-zPL" firstAttribute="centerX" secondItem="Jbm-NS-lq4" secondAttribute="centerX" id="2RT-jk-9B9"/>
+                                    <constraint firstAttribute="trailing" secondItem="w9Q-Ai-Jpq" secondAttribute="trailing" constant="8" id="8dy-az-X9a"/>
                                     <constraint firstAttribute="bottom" secondItem="iUr-Zx-uPS" secondAttribute="bottom" id="DuF-l3-FDB"/>
                                     <constraint firstItem="iUr-Zx-uPS" firstAttribute="top" secondItem="Jbm-NS-lq4" secondAttribute="top" id="FU7-b6-4HL"/>
                                     <constraint firstItem="iUr-Zx-uPS" firstAttribute="leading" secondItem="Jbm-NS-lq4" secondAttribute="leading" id="Lun-Yb-pB9"/>
                                     <constraint firstItem="wb2-sn-zPL" firstAttribute="centerY" secondItem="Jbm-NS-lq4" secondAttribute="centerY" id="bEy-2q-TAo"/>
+                                    <constraint firstItem="w9Q-Ai-Jpq" firstAttribute="centerY" secondItem="Jbm-NS-lq4" secondAttribute="centerY" id="cJk-tt-Ud7"/>
                                     <constraint firstAttribute="height" constant="30" id="wJn-zX-QfC"/>
                                 </constraints>
                             </view>

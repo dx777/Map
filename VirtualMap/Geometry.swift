@@ -18,7 +18,7 @@ class Geometry {
     static func getAttachedCoordinates(x: Int, y: Int, x1: Int, x2: Int, y1: Int, y2: Int ) -> [Int] {
         var coords : [Int] = [0, 0]
         
-        let L : Double = Double(Int(x1 - x2) * Int(x1 - x2) + Int(y1 - y1) * Int(y1 - y2))
+        let L : Double = Double(Int(x1 - x2) * Int(x1 - x2) + Int(y1 - y2) * Int(y1 - y2))
         let PR : Double = Double(Int(x - x1) * Int(x2 - x1) + Int(y - y1) * Int(y2 - y1))
         
         var res : Bool = true

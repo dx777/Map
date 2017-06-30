@@ -148,15 +148,17 @@ class MapDataParsing {
             
             if let stacksContent = stacksContent{
                 for stack in stacksContent {
-                    stacks.append(Stack(id: stack["id"] as! String,
-                                         x1: stack["x1"] as! Int,
-                                         x2: stack["x2"] as! Int,
-                                         x3: stack["x3"] as! Int,
-                                         x4: stack["x4"] as! Int,
-                                         y1: stack["y1"] as! Int,
-                                         y2: stack["y2"] as! Int,
-                                         y3: stack["y3"] as! Int,
-                                         y4: stack["y4"] as! Int))
+                    if(stack["x1"] != nil && stack["x2"] != nil && stack["x3"] != nil && stack["x4"] != nil && (stack["y1"] != nil && stack["y2"] != nil && stack["y3"] != nil && stack["y4"] != nil)) {
+                        stacks.append(Stack(id: stack["id"] as! String,
+                                             x1: stack["x1"] as! Int,
+                                             x2: stack["x2"] as! Int,
+                                             x3: stack["x3"] as! Int,
+                                             x4: stack["x4"] as! Int,
+                                             y1: stack["y1"] as! Int,
+                                             y2: stack["y2"] as! Int,
+                                             y3: stack["y3"] as! Int,
+                                             y4: stack["y4"] as! Int))
+                    }
                 }
             }
         }

@@ -92,8 +92,7 @@ class CoordinatesConverter {
                 
                 // Получаем найменьшее значение
                 var minIndex = 0
-                var minDistance = Geometry.distanceBetweenPoints(x1: Double(pointsCoordinates[0].x), y1: Double(pointsCoordinates[0].x), x2: Double((MapViewController.currentUserLoc?.x)!), y2: Double((MapViewController.currentUserLoc?.y)!))
-                minDistance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: pointsCoordinates[0].x, y: pointsCoordinates[0].y), and: CGPoint(x: pointsCoordinates[1].x, y: pointsCoordinates[1].y))
+                var minDistance = Geometry.distanceFromPoint(p: CGPoint(x: (MapViewController.currentUserLoc?.x)!, y: (MapViewController.currentUserLoc?.y)!), toLineSegment: CGPoint(x: pointsCoordinates[0].x, y: pointsCoordinates[0].y), and: CGPoint(x: pointsCoordinates[1].x, y: pointsCoordinates[1].y))
                 var distance = 0.0
                 var distances : [Double] = []
                 for i in 1..<pointsCoordinates.count {

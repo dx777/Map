@@ -59,6 +59,7 @@ class ApplicationManager {
                 }
             }
         } else {
+            self.currentUserPoint(position, beacon)
             getTotalDistance(position: position)
         }
     }

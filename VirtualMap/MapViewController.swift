@@ -39,12 +39,12 @@ class MapViewController: UIViewController  {
     
     override func viewDidAppear(_ animated: Bool) {
         
-            
-            if !MapViewController.onApplicationStarted {
-                ApplicationManager.sharedInstance.onApplicationStart()
-            }
-            ApplicationManager.sharedInstance.gotFloorData = drawFloor
-
+        
+        if !MapViewController.onApplicationStarted {
+            ApplicationManager.sharedInstance.onApplicationStart()
+        }
+        ApplicationManager.sharedInstance.gotFloorData = drawFloor
+        
         
     }
     
@@ -52,8 +52,8 @@ class MapViewController: UIViewController  {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeDistance(_:)), name: NSNotification.Name(rawValue: "ChangeDistance"), object: nil)
-
-
+        
+        
         
         
         
@@ -62,8 +62,8 @@ class MapViewController: UIViewController  {
         mapView.addGestureRecognizer(tap)
         
         
-
-
+        
+        
         dropDown.anchorView = self.chooseFloorView
         dropDown.show()
         dropDown.direction = .bottom
@@ -92,7 +92,7 @@ class MapViewController: UIViewController  {
         
     }
     
-
+    
     
     
     func initiateRoute(touch: UITapGestureRecognizer) {
@@ -110,14 +110,14 @@ class MapViewController: UIViewController  {
                 
                 
                 
-//                                pinImage.removeFromSuperview()
-//                                let pin = UIImage(named: "pin")
-//                                pinImage.removeFromSuperview()
-//                                pinImage.image = pin
-//                                pinImage.frame = CGRectMake(touchPoint.x, touchPoint.y, 40, 40)
-//                                pinImage.contentMode = UIViewContentMode.scaleAspectFill
-//                                self.mapView.addSubview(pinImage)
-//                                pinImage.center = touchPoint
+                //                                pinImage.removeFromSuperview()
+                //                                let pin = UIImage(named: "pin")
+                //                                pinImage.removeFromSuperview()
+                //                                pinImage.image = pin
+                //                                pinImage.frame = CGRectMake(touchPoint.x, touchPoint.y, 40, 40)
+                //                                pinImage.contentMode = UIViewContentMode.scaleAspectFill
+                //                                self.mapView.addSubview(pinImage)
+                //                                pinImage.center = touchPoint
                 
             }
             
@@ -195,7 +195,7 @@ class MapViewController: UIViewController  {
         
     }
     
-
+    
     
     
     
@@ -232,7 +232,7 @@ class MapViewController: UIViewController  {
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     
     
     func convertToDictionary(text: String) -> [String: Any]? {
@@ -286,7 +286,7 @@ class MapViewController: UIViewController  {
             }
             
         }
-
+        
         
         
         print(url)
@@ -363,8 +363,8 @@ class MapViewController: UIViewController  {
         let yDist = a.y - b.y
         return CGFloat(sqrt((xDist * xDist) + (yDist * yDist)))
     }
-
-
+    
+    
     
     func downloadFloor(shop: Int, floor: Int) {
         MapViewController.currentFloor = floor
@@ -378,7 +378,7 @@ class MapViewController: UIViewController  {
         let headers: HTTPHeaders = [
             "X-Client-Id": "\(uuid)",
             "X-Client-Os": "ios",
-        ]
+            ]
         
         
         let url = "https://www.teleroamer.com/api/v1/maps/\(shop)/floors/\(floor)"
@@ -391,7 +391,7 @@ class MapViewController: UIViewController  {
                 MapViewController.autodetect = false
                 self.drawFloor(floor: result!)
                 
-
+                
             }
             
             
@@ -413,7 +413,7 @@ class MapViewController: UIViewController  {
                     }
                     onCompletion(totalFloors)
                     
-
+                    
                     
                 }
             }
@@ -428,38 +428,49 @@ class MapViewController: UIViewController  {
         MapViewController.arrayOfPointsToDraw = []
     }
     
-    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
-            let translation = recognizer.translation(in: mapView)
-            if recognizer.view != nil {
-                let offsetX = translation.x * CGFloat(cosf(Float(rotateView))) - translation.y * CGFloat(sinf(Float(rotateView)))
-                let offsetY = translation.x * CGFloat(sinf(Float(rotateView))) + translation.y * CGFloat(cosf(Float(rotateView)))
-                mapView.center = CGPoint(x:mapView.center.x + offsetX * scaleView,
-                                         y:mapView.center.y + offsetY * scaleView)
+    @IBAction func centerToUser(_ sender: Any) {
+        if(MapViewController.currentUserLoc != nil && autofloor == MapViewController.currentFloor) {
+            let userPointInParentView = mapView.convert(MapViewController.currentUserLoc!, to: self.view)
+            let translation = CGPoint(x: self.view.center.x - userPointInParentView.x, y: self.view.center.y - userPointInParentView.y)
+            let offsetX = translation.x * CGFloat(cosf(Float(rotateView))) - translation.y * CGFloat(sinf(Float(rotateView)))
+            let offsetY = translation.x * CGFloat(sinf(Float(rotateView))) + translation.y * CGFloat(cosf(Float(rotateView)))
+            UIView.animate(withDuration: 0.3) {
+                self.mapView.center = CGPoint(x:self.mapView.center.x + offsetX * self.scaleView,
+                                              y:self.mapView.center.y + offsetY * self.scaleView)
             }
-            recognizer.setTranslation(CGPoint(x: 0, y: 0), in: mapView)
-        
-        
+        }
+    }
+    
+    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
+        let translation = recognizer.translation(in: mapView)
+        if recognizer.view != nil {
+            let offsetX = translation.x * CGFloat(cosf(Float(rotateView))) - translation.y * CGFloat(sinf(Float(rotateView)))
+            let offsetY = translation.x * CGFloat(sinf(Float(rotateView))) + translation.y * CGFloat(cosf(Float(rotateView)))
+            mapView.center = CGPoint(x:mapView.center.x + offsetX * scaleView,
+                                     y:mapView.center.y + offsetY * scaleView)
+        }
+        recognizer.setTranslation(CGPoint(x: 0, y: 0), in: mapView)
     }
     
     @IBAction func handlePinch(recognizer : UIPinchGestureRecognizer) {
-            if recognizer.view != nil {
-                setAnchor(point: recognizer.location(in: mapView))
-                mapView.transform = mapView.transform.scaledBy(x: recognizer.scale, y: recognizer.scale)
-                scaleView = recognizer.scale * scaleView
-                recognizer.scale = 1
-            }
-            
-            
+        if recognizer.view != nil {
+            setAnchor(point: recognizer.location(in: mapView))
+            mapView.transform = mapView.transform.scaledBy(x: recognizer.scale, y: recognizer.scale)
+            scaleView = recognizer.scale * scaleView
+            recognizer.scale = 1
+        }
+        
+        
         
     }
     
     @IBAction func handleRotate(recognizer : UIRotationGestureRecognizer) {
-            if recognizer.view != nil {
-                setAnchor(point: recognizer.location(in: mapView))
-                mapView.transform = mapView.transform.rotated(by: recognizer.rotation)
-                rotateView = rotateView + recognizer.rotation
-                recognizer.rotation = 0
-            }
+        if recognizer.view != nil {
+            setAnchor(point: recognizer.location(in: mapView))
+            mapView.transform = mapView.transform.rotated(by: recognizer.rotation)
+            rotateView = rotateView + recognizer.rotation
+            recognizer.rotation = 0
+        }
         
         
     }
